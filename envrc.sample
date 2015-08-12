@@ -1,3 +1,4 @@
 export GOOGLE_MACHINE_TYPE="g1-small"
 export GOOGLE_PROJECT="xxx"
 export GOOGLE_ZONE="asia-east1-a"
+export COMPOSE_PROJECT_NAME="parkmap"
