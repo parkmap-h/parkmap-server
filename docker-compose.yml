@@ -1,7 +1,15 @@
 db:
   image: "mdillon/postgis:9.4"
   volumes:
-    - "/data/postgis:/var/lib/postgresql/data"
+    - "/db/postgis:/var/lib/postgresql/data"
+db-backup:
+  image: "docker"
+  links:
+    - db
+  volumes:
+    - "/var/run/docker.sock:/var/run/docker.sock"
+  command: sh -c "docker run --rm --link parkmap_db_1:db -t mdillon/postgis:9.4 pg_dump -h db -U $DATABASE_USER -w $DATABASE_DBNAME | gzip | docker run --rm  --volumes-from gcloud-config -i google/cloud-sdk gsutil cp - $BACKUP_STORAGE/parkmap_`TZ=JST-9 date +%Y%m%d_%H%M%S`.sql.gz"
+  env_file: docker-app.env
 web:
   image: "eiel/parkmap"
   command: bin/rails s -b 0.0.0.0
