@@ -1,0 +1,1 @@
+docker run --rm --link parkmap_db_1:db -t mdillon/postgis:9.4 pg_dump -h db -U $DATABASE_USER -w $DATABASE_DBNAME | gzip | docker run --rm  --volumes-from gcloud-config -i google/cloud-sdk gsutil cp - $BACKUP_STORAGE/parkmap_`TZ=JST-9 date +%Y%m%d_%H%M%S`.sql.gz

@@ -1,7 +1,14 @@
 db:
   image: "mdillon/postgis:9.4"
   volumes:
-    - "/data/postgis:/var/lib/postgresql/data"
+    - "/db/postgis:/var/lib/postgresql/data"
+db-backup:
+  build: "backup"
+  links:
+    - db
+  volumes:
+    - "/var/run/docker.sock:/var/run/docker.sock"
+  env_file: docker-app.env
 web:
   image: "eiel/parkmap"
   command: bin/rails s -b 0.0.0.0
